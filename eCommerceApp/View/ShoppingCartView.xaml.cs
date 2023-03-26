@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace eCommerceApp
+namespace eCommerceApp.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ShoppingCartView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ShoppingCartView : UserControl
     {
-        public MainWindow()
+        public ShoppingCartView()
         {
             InitializeComponent();
         }

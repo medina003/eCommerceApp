@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="eCommerceApp.View.ShoppingCartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:eCommerceApp.View"
+             mc:Ignorable="d" 
+                     xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModel="clr-namespace:eCommerceApp.ViewModel"
+
+            d:DataContext="{d:DesignInstance viewModel:ShoppingCartViewModel}"
+            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+            TextElement.FontWeight="Regular"
+            TextElement.FontSize="14"
+            TextOptions.TextFormattingMode="Ideal"
+            TextOptions.TextRenderingMode="Auto"
+            Background="{DynamicResource MaterialDesignPaper}"
+            FontFamily="{DynamicResource MaterialDesignFont}"
+             Height="600" Width="950">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding BackCommand}" Height="50"  BorderBrush="Transparent"  BorderThickness="100"   Width="117">
+                <mD:PackIcon
+                    Width="70"
+                    Height="40"
+                    Foreground="#1A4314"
+                    Kind="ArrowBackCircle"  HorizontalAlignment="Center"/>
+            </Button>
+            <TextBlock Foreground="#1A4314" Grid.Column="1" FontSize="40" HorizontalAlignment="Left" Margin="220,0,0,0" >Shopping Cart</TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="79*" />
+                <ColumnDefinition Width="698*"/>
+                <ColumnDefinition Width="79*" />
+            </Grid.ColumnDefinitions>
+            <ListView SelectedItem="{Binding f }" ItemsSource="{Binding Items}" Grid.Column="1" Margin="79,0,79,0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding Book.ImageUrl}" Height="200" Width="200" ></Image>
+                            <StackPanel>
+
+                                <TextBlock Text="{Binding  Book.Title}" FontSize="20" ></TextBlock>
+                                <TextBlock  Text="{Binding Book.Author}" FontSize="16" ></TextBlock>
+                                <!--<TextBlock Text="{Binding Language.Name}" FontSize="16"  Name="Language"></TextBlock>
+                                <TextBlock Text="{Binding Format.Name}" FontSize="16" Name="Format"></TextBlock>-->
+                                <TextBlock Text="{Binding  Book.Price,StringFormat='{}{0:C}'}" FontSize="16" Name="Price"></TextBlock>
+                                <TextBlock></TextBlock>
+                                <Button  HorizontalAlignment="Left" Background="#ECF87F" BorderBrush="#3D550C" Height="30" Width="30" 
+                          Command="{Binding DataContext.AddToCartCommand, ElementName=UserPanel }"
+                         Style="{StaticResource MaterialDesignFloatingActionSecondaryLightButton}"  >
+                                    <mD:PackIcon Foreground="#3D550C" Background="#ECF87F" mD:ThemeAssist.Theme="Light" Width="15" Height="15" Kind="Minus"/>
+                                </Button>
+                                                                <TextBlock Margin="10 0 0 0" Text="{Binding Quantity}" FontSize="16" ></TextBlock>
+
+                                <Button  HorizontalAlignment="Left" Background="#ECF87F" BorderBrush="#3D550C" Height="30" Width="30" 
+                          Command="{Binding DataContext.AddToCartCommand, ElementName=UserPanel }"
+                         Style="{StaticResource MaterialDesignFloatingActionSecondaryLightButton}"  >
+                                    <mD:PackIcon Foreground="#3D550C" Background="#ECF87F" mD:ThemeAssist.Theme="Light" Width="15" Height="15" Kind="Plus"/>
+                                </Button>
+                                <TextBlock></TextBlock>
+                                <Button HorizontalAlignment="Left" FontSize="13" Foreground="#ECF87F" Background="#1A4314" Grid.Column="3" Command="{Binding PayOffBalanceCommand }"  Content="Remove" Height="30" Width="90"  />
+
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+
+            </Grid.ColumnDefinitions>
+            <Button  FontSize="17" Foreground="#ECF87F" Background="#1A4314" Command="{Binding PayOffBalanceCommand }"  Content="Clear All" Height="50"  HorizontalAlignment="Center"   VerticalAlignment="Top" Width="200" Margin="0,20,0,0"  />
+
+            <TextBlock Foreground="#1A4314" Grid.Column="1" FontSize="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,0,0">Total:</TextBlock>
+            <TextBlock Text="{Binding Total,StringFormat='{}{0:C}'}" HorizontalAlignment="Left" Foreground="Black" Grid.Column="2" FontSize="30"  VerticalAlignment="Top" Margin="0,21,0,0"></TextBlock>
+            <Button  FontSize="17" Foreground="#ECF87F" Background="#1A4314" Grid.Column="2" Command="{Binding PayOffBalanceCommand }"  Content="Proceed To Checkout" Height="50"  HorizontalAlignment="Left"  Name="Submit" VerticalAlignment="Top" Width="200" Margin="237,20,0,0" Grid.ColumnSpan="2"  />
+
+        </Grid>
+    </Grid>
+</UserControl>
