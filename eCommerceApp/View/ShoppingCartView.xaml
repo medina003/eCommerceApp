@@ -16,7 +16,7 @@
             TextOptions.TextRenderingMode="Auto"
             Background="{DynamicResource MaterialDesignPaper}"
             FontFamily="{DynamicResource MaterialDesignFont}"
-             Height="600" Width="950">
+             Height="600" Width="950" Name="ShoppingCart">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"></RowDefinition>
@@ -44,7 +44,7 @@
                 <ColumnDefinition Width="698*"/>
                 <ColumnDefinition Width="79*" />
             </Grid.ColumnDefinitions>
-            <ListView SelectedItem="{Binding f }" ItemsSource="{Binding Items}" Grid.Column="1" Margin="79,0,79,0">
+            <ListView SelectedItem="{Binding SelectedItem }" ItemsSource="{Binding Items}" Grid.Column="1" Margin="79,0,79,0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -58,20 +58,19 @@
                                 <TextBlock Text="{Binding  Book.Price,StringFormat='{}{0:C}'}" FontSize="16" Name="Price"></TextBlock>
                                 <TextBlock></TextBlock>
                                 <Button  HorizontalAlignment="Left" Background="#ECF87F" BorderBrush="#3D550C" Height="30" Width="30" 
-                          Command="{Binding DataContext.AddToCartCommand, ElementName=UserPanel }"
+                          Command="{Binding DataContext.MinusCommand, ElementName=ShoppingCart }"
                          Style="{StaticResource MaterialDesignFloatingActionSecondaryLightButton}"  >
                                     <mD:PackIcon Foreground="#3D550C" Background="#ECF87F" mD:ThemeAssist.Theme="Light" Width="15" Height="15" Kind="Minus"/>
                                 </Button>
                                                                 <TextBlock Margin="10 0 0 0" Text="{Binding Quantity}" FontSize="16" ></TextBlock>
 
                                 <Button  HorizontalAlignment="Left" Background="#ECF87F" BorderBrush="#3D550C" Height="30" Width="30" 
-                          Command="{Binding DataContext.AddToCartCommand, ElementName=UserPanel }"
+                          Command="{Binding DataContext.PlusCommand, ElementName=ShoppingCart }"
                          Style="{StaticResource MaterialDesignFloatingActionSecondaryLightButton}"  >
                                     <mD:PackIcon Foreground="#3D550C" Background="#ECF87F" mD:ThemeAssist.Theme="Light" Width="15" Height="15" Kind="Plus"/>
                                 </Button>
                                 <TextBlock></TextBlock>
-                                <Button HorizontalAlignment="Left" FontSize="13" Foreground="#ECF87F" Background="#1A4314" Grid.Column="3" Command="{Binding PayOffBalanceCommand }"  Content="Remove" Height="30" Width="90"  />
-
+                                <Button Command="{Binding DataContext.RemoveCommand, ElementName=ShoppingCart }"  HorizontalAlignment="Left" FontSize="13" Foreground="#ECF87F" Background="#1A4314" Grid.Column="3"  Content="Remove" Height="30" Width="90"  />
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
@@ -86,7 +85,7 @@
                 <ColumnDefinition></ColumnDefinition>
 
             </Grid.ColumnDefinitions>
-            <Button  FontSize="17" Foreground="#ECF87F" Background="#1A4314" Command="{Binding PayOffBalanceCommand }"  Content="Clear All" Height="50"  HorizontalAlignment="Center"   VerticalAlignment="Top" Width="200" Margin="0,20,0,0"  />
+            <Button  FontSize="17" Foreground="#ECF87F" Background="#1A4314" Command="{Binding ClearAllCommand }"  Content="Clear All" Height="50"  HorizontalAlignment="Center"   VerticalAlignment="Top" Width="200" Margin="0,20,0,0"  />
 
             <TextBlock Foreground="#1A4314" Grid.Column="1" FontSize="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,0,0">Total:</TextBlock>
             <TextBlock Text="{Binding Total,StringFormat='{}{0:C}'}" HorizontalAlignment="Left" Foreground="Black" Grid.Column="2" FontSize="30"  VerticalAlignment="Top" Margin="0,21,0,0"></TextBlock>

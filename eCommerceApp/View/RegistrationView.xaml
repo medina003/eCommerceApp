@@ -5,8 +5,89 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:eCommerceApp.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModel="clr-namespace:eCommerceApp.ViewModel"
+            d:DataContext="{d:DesignInstance viewModel:RegistrationViewModel}"
+            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+            TextElement.FontWeight="Regular"
+            TextElement.FontSize="14"
+            TextOptions.TextFormattingMode="Ideal"
+            TextOptions.TextRenderingMode="Auto"
+            Background="{DynamicResource MaterialDesignPaper}"
+            FontFamily="{DynamicResource MaterialDesignFont}"
+            Name="RegistrationPanel" Height="600" Width="950">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+
+        </Grid.RowDefinitions>
+        <Button Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding BackCommand}" Height="50"  BorderBrush="Transparent"  BorderThickness="100"   Width="117">
+            <mD:PackIcon
+                    Width="70"
+                    Height="40"
+                    Foreground="#1A4314"
+                    Kind="ArrowBackCircle"  HorizontalAlignment="Center"/>
+        </Button>
+        <TextBlock FontSize="40"  Foreground="#1A4314" VerticalAlignment="Center" HorizontalAlignment="Center">Create Account
+        </TextBlock>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"  ></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Margin="-2,0,2,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0"  >Name:</TextBlock>
+                <TextBlock Text="{Binding Error.FirstName_error}"  Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="13" Height="30" Width="300" Margin="140,0,0,0" />
+
+                <TextBlock Grid.Row="2"  FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0"  >Surname:</TextBlock>
+                <TextBlock Text="{Binding Error.LastName_error}" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="13" Height="30" Width="300" Margin="140,0,0,0" ></TextBlock>
+                <TextBlock Grid.Row="4"  FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"  >Email:</TextBlock>
+                <TextBlock Text="{Binding Error.Email_error}" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="13" Height="30" Width="300" Margin="140,0,0,0" ></TextBlock>
+
+                <TextBox Text="{Binding User.Name}"  Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Height="40" Width="300" Margin="140,0,0,0" ></TextBox>
+                <TextBox  Text="{Binding User.Surname}"  Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Height="40" Width="300" Margin="140,0,0,0" ></TextBox>
+                <TextBox  Text="{Binding User.Email}"  Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Height="40" Width="300" Margin="140,0,0,0" ></TextBox>
+
+
+            </Grid>
+            <Grid Grid.Column="1" Margin="-2,0,2,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-4,0,0,0"  >Password:</TextBlock>
+                <TextBlock Text="{Binding Error.Password_error}" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="13" Height="30" Width="330" Margin="140,0,0,0" />
+
+                <TextBlock Grid.Row="2"  FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="18,0,0,0"  >Confirm:</TextBlock>
+                <TextBlock Text="{Binding Error.PasswordConfirmation_error}" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="13" Height="30" Width="330" Margin="140,0,0,0" ></TextBlock>
+
+                <TextBox Text="{Binding User.Password}"  Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Height="40" Width="300" Margin="140,0,0,0" ></TextBox>
+                <TextBox Text="{Binding PasswordConfirmation}"  Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Height="40" Width="300" Margin="140,0,0,0" ></TextBox>
+
+
+            </Grid>
+
+        </Grid>
+        <Button Grid.Row="2" Background="#1A4314" Foreground="#ECF87F" Width="250" FontSize="30" Height="50" Command="{Binding RegisterCommand}" >Create Account</Button>
+
+        <TextBlock  Text="{Binding Error.Empty_error}" Grid.Row="3" Width="400" Height="30" FontSize="13"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="337,0,0,0" ></TextBlock>
+
     </Grid>
 </UserControl>

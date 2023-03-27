@@ -25,7 +25,7 @@ namespace eCommerceApp.ViewModel
         public ObservableCollection<Data.Models.Book>? Books { get; set; }
         //public static  ShoppingCart? TempShoppingCart { get; set; } = new();
         //public static CartItem? TempCartItem { get; set; }
-        public User? CurrentUser { get; set; } = null;
+        public User? CurrentUser { get; set; }
         public Book? SelectedItem { get; set; }
         private INavigationService? _navigationService;
         private readonly IMessenger? _messenger;
@@ -47,15 +47,6 @@ namespace eCommerceApp.ViewModel
             //    //Format format = new Format() { Name= "Paperback" };
             //    //db.Books.Add(new Book { Title = "The Help", Author = "Kathryn Stockett", ISBN = "0425232204", Description = "In Jackson, Mississippi, in 1962, there are lines that are not crossed. With the civil rights movement exploding all around them, three women start a movement of their own, forever changing a town and the way women--black and white, mothers and daughters--view one another.", PageCount = 534, Weight = 0.83F, Publisher = "Penguin Publishing Group", Price = 8.74, ImageUrl = "https://images.bwbcovers.com/042/The-Help-9780425232200.jpg", Language = language, Category = category, Format = format });
             //    //db.SaveChanges();
-            //    //var item = await db.Books.ToListAsync();
-            //    //ObservableCollection<Book> b = new ObservableCollection<Book> ((IEnumerable<Book>)db.Books.ToListAsync());
-            //    //var item = db.Books.ToListAsync().Wait(); 
-            //    //var item =  db.Books.Include(a=>a.La);
-
-            //    //return  item;
-            //    db.Books.Load();
-            //    Books = new(db.Books.ToList());
-
 
             //}
 
@@ -71,7 +62,6 @@ namespace eCommerceApp.ViewModel
 
                     if (CurrentUser == null)
                     {
-                        //TempCartItem = new();
                         if (TemporaryCart.TempCartItems!.Any(a => a.BookId == SelectedItem.Id))
                         {
                             int index = (TemporaryCart.TempCartItems!.FindIndex(a => a.BookId == SelectedItem.Id));
@@ -81,12 +71,6 @@ namespace eCommerceApp.ViewModel
                         {
                             TemporaryCart.TempCartItems!.Add(new CartItem() { BookId = SelectedItem.Id ,Book=SelectedItem,Quantity=1});
                         }
-                        //if (TempCartItem?.Quantity == null) { TempCartItem!.Quantity = 1; }
-                        //else { TempCartItem.Quantity += 1; }
-                        //TempCartItem.Book = SelectedItem;
-                        //TempShoppingCart!.CartItems = new List<CartItem>();
-                        //TempShoppingCart.CartItems.Add(TempCartItem);
-                        MessageBox.Show("dfc");
 
 
                     }
@@ -106,9 +90,9 @@ namespace eCommerceApp.ViewModel
                             //var item =  db.Books.Include(a=>a.La);
 
                             //return  item;
-                            if (db.CartItems.Any(b => b.BookId == SelectedItem.Id))
+                            if (db.CartItems.Any(b => b.BookId == SelectedItem.Id && b.ShoppingCartId == CurrentUser.ShoppingCart!.Id) )
                             {
-                                db.CartItems.FirstOrDefault(b => b.BookId == SelectedItem.Id)!.Quantity += 1;
+                                db.CartItems.FirstOrDefault(b => b.BookId == SelectedItem.Id && b.ShoppingCartId == CurrentUser.ShoppingCart!.Id)!.Quantity += 1;
                             }
                             else { db.CartItems.Add(new() { BookId = SelectedItem.Id, ShoppingCartId = CurrentUser.ShoppingCart!.Id, Quantity = 1 });
                                 db.SaveChanges();
@@ -146,6 +130,17 @@ namespace eCommerceApp.ViewModel
 
             });
 
+        }
+        public RelayCommand AccountCommand
+        {
+            get => new(() =>
+            {
+                if (CurrentUser == null)
+                    _navigationService?.NavigateTo<LoginViewModel>();
+
+
+
+            });
         }
     }
 }

@@ -86,7 +86,7 @@ Transparent"  BorderThickness="100">
                 <TextBlock FontSize="10" Foreground="#ECF87F"  Grid.Column="7" Text="1" VerticalAlignment="Center"  HorizontalAlignment="Center">
                 </TextBlock>
             </Border>
-            <Button Command="{Binding LogOutCommand}" Grid.Column="6"  Width="50" Height="50"   BorderBrush="
+            <Button Command="{Binding AccountCommand}" Grid.Column="6"  Width="50" Height="50"   BorderBrush="
 Transparent"  BorderThickness="100">
                 <mD:PackIcon
                     Width="20"
