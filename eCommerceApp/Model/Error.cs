@@ -18,5 +18,10 @@ namespace eCommerceApp.Model
         public string? FirstName_error { get; set; }
         public string? LastName_error { get; set; }
         public string? Address_error { get; set; }
+        public string? CardNumberError { get; set; }
+        public string? YearError { get; set; }
+        public string? MonthError { get; set; }
+        public string? CVVError { get; set; }
+
     }
 }

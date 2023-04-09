@@ -39,21 +39,21 @@ namespace eCommerceApp.ViewModel
                 {
                     using (var db = new BookStoreDbContext())
                     {
-                        var FoundCart = db.ShoppingCarts.FirstOrDefault(c => c.UserId == User.Id);                       
+                        var FoundCart = db.ShoppingCarts.FirstOrDefault(c => c.UserId == User.Id);
                         Items = new(db.CartItems.Where(s => s.ShoppingCartId == FoundCart!.Id).Include(c => c.Book).ToList());
                     }
                 }
                 else
                 {
 
-  
-                        if (User == null)
-                        {
 
-                            Items = new(TemporaryCart.TempCartItems!);
-                        }
+                    if (User == null)
+                    {
 
-                    
+                        Items = new(TemporaryCart.TempCartItems!);
+                    }
+
+
                 }
             });
             //using (var db = new BookStoreDbContext())
@@ -93,10 +93,11 @@ namespace eCommerceApp.ViewModel
                         {
                             if (SelectedItem.Quantity == 1)
                             {
-                                db.CartItems.Remove(SelectedItem); db.SaveChanges();
-                                Items = new(db.CartItems.Where(s => s.ShoppingCartId == User.ShoppingCart.Id).Include(c => c.Book).ToList());
+                                db.CartItems.Remove(SelectedItem);
                             }
-                            else { db.CartItems.Find(SelectedItem).Quantity -= 1; db.SaveChanges(); }
+                            else { SelectedItem.Quantity -= 1;  db.CartItems.Update(SelectedItem);   }
+                            Items = new(db.CartItems.Where(s => s.ShoppingCartId == User.ShoppingCart!.Id).Include(c => c.Book).ToList());
+                            db.SaveChanges();
                         }
                     }
                 }
@@ -104,7 +105,7 @@ namespace eCommerceApp.ViewModel
 
             });
         }
-                    public RelayCommand PlusCommand
+        public RelayCommand PlusCommand
         {
             get => new(() =>
             {
@@ -137,9 +138,25 @@ namespace eCommerceApp.ViewModel
                     {
                         using (var db = new BookStoreDbContext())
                         {
-      
-                           db.CartItems.Find(SelectedItem).Quantity += 1; db.SaveChanges(); 
+                            //db.Stocks.Add(new() { BookId = SelectedItem.BookId, Quantity = 300 });
+                            //db.SaveChanges();
+
+                            var stock = db.Stocks.FirstOrDefault(s => s.BookId == SelectedItem.BookId);
+
+                            if (SelectedItem.Quantity == stock!.Quantity) 
+                            {
+                                MessageBox.Show("There are no more items available in the stock :( Try later :)");
+                            }
+                            else
+                            {
+                                SelectedItem.Quantity += 1; db.CartItems.Update(SelectedItem);
+                                db.SaveChanges();
+
+                                Items = new(db.CartItems.Where(s => s.ShoppingCartId == User.ShoppingCart!.Id).Include(c => c.Book).ToList());
+                            }
+
                         }
+                        
                     }
                 }
 
@@ -180,7 +197,9 @@ namespace eCommerceApp.ViewModel
                         using (var db = new BookStoreDbContext())
                         {
 
-                            db.CartItems.Find(SelectedItem).Quantity += 1; db.SaveChanges();
+                            db.CartItems.Remove(SelectedItem); db.SaveChanges();
+                            Items = new(db.CartItems.Where(s => s.ShoppingCartId == User.ShoppingCart!.Id).Include(c => c.Book).ToList());
+
                         }
                     }
                 }
@@ -193,38 +212,42 @@ namespace eCommerceApp.ViewModel
             get => new(() =>
             {
 
-                    if (User == null)
+                if (User == null)
+                {
+                    if (TemporaryCart.TempCartItems != null)
                     {
-                        if (TemporaryCart.TempCartItems != null)
-                        {
-                            //int index = TemporaryCart.TempCartItems!.FindIndex(a => a.BookId == SelectedItem.BookId);
+                        //int index = TemporaryCart.TempCartItems!.FindIndex(a => a.BookId == SelectedItem.BookId);
 
-                            TemporaryCart.TempCartItems.Clear();
-                            Items = new(TemporaryCart.TempCartItems);
+                        TemporaryCart.TempCartItems.Clear();
+                        Items = new(TemporaryCart.TempCartItems);
 
-                            //int index = TemporaryCart.TempCartItems!.FindIndex(a => a.BookId == SelectedItem.BookId);
-                            //using (var db = new BookStoreDbContext()) {
-                            //int quantity = db.Stocks.Where(s=> s.BookId == SelectedItem.BookId).FirstOrDefault()!.Quantity; 
-                            //if(quantity != TemporaryCart.TempCartItems[index].Quantity)
-                            //    {
-                            //TemporaryCart.TempCartItems[index].Quantity += 1;
-                            //Items = new(TemporaryCart.TempCartItems);
-                            //}
-                            //else { MessageBox.Show("Have no more items in stock"); };
+                        //int index = TemporaryCart.TempCartItems!.FindIndex(a => a.BookId == SelectedItem.BookId);
+                        //using (var db = new BookStoreDbContext()) {
+                        //int quantity = db.Stocks.Where(s=> s.BookId == SelectedItem.BookId).FirstOrDefault()!.Quantity; 
+                        //if(quantity != TemporaryCart.TempCartItems[index].Quantity)
+                        //    {
+                        //TemporaryCart.TempCartItems[index].Quantity += 1;
+                        //Items = new(TemporaryCart.TempCartItems);
+                        //}
+                        //else { MessageBox.Show("Have no more items in stock"); };
 
-                            //}
+                        //}
 
-                        }
                     }
-                    else
+                }
+                else
+                {
+                    using (var db = new BookStoreDbContext())
                     {
-                        using (var db = new BookStoreDbContext())
-                        {
+                        var cart = db.ShoppingCarts.First(u => u.UserId == User.Id);
 
-                            db.CartItems.Find(SelectedItem).Quantity += 1; db.SaveChanges();
-                        }
+                        db.CartItems.RemoveRange(db.CartItems.Where(i => i.ShoppingCartId == cart.Id));
+                        db.SaveChanges();
+                        Items = new(db.CartItems.Where(s => s.ShoppingCartId == User.ShoppingCart!.Id).Include(c => c.Book).ToList());
+
                     }
-                
+                }
+
 
 
             });
@@ -233,11 +256,64 @@ namespace eCommerceApp.ViewModel
         {
             get => new(() =>
             {
-                                _navigationService?.NavigateTo<UserPanelViewModel>(new ParameterMessage() { Message = User });
+                _navigationService?.NavigateTo<UserPanelViewModel>(new ParameterMessage() { Message = User });
 
 
 
             });
+        }
+
+        public RelayCommand CheckoutCommand
+        {
+            get => new(() =>
+            {
+                
+
+                if (User == null)
+                {
+                    if(TemporaryCart.TempCartItems!.Count != 0)
+                    {
+                    _navigationService?.NavigateTo<LoginViewModel>(new ParameterMessage() { Message = User });
+
+                    }
+                    else { MessageBox.Show("You don't have items in shopping cart");  }
+
+                }
+                else
+                {
+                    using (var db = new BookStoreDbContext())
+                    {
+                        ShoppingCart? foundCart = db.ShoppingCarts.FirstOrDefault(u=>u.UserId == User.Id);
+
+                        if (db.CartItems.Any(u => u.ShoppingCartId == foundCart!.Id))
+                        {
+                            if(db.CustomerDetails.Any(u => u.UserId == User!.Id))
+                            {
+                                foreach(var item in db.CartItems)
+                                {
+                                    if (item.ShoppingCartId == User!.Id)
+                                    {
+                                   
+                                    }
+                                }
+                            }
+                        
+                        
+                        
+                        
+                        }
+                        else
+                        {
+                            MessageBox.Show("No items in shopping cart");
+                        }
+
+                    }
+                }
+
+
+
+            });
+
         }
 
 

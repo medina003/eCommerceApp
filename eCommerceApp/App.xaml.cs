@@ -39,6 +39,8 @@ namespace eCommerceApp
             Container.RegisterSingleton<UserPanelViewModel>();
             Container.RegisterSingleton<ShoppingCartViewModel>();
             Container.RegisterSingleton<RegistrationViewModel>();
+            Container.RegisterSingleton<PaymentViewModel>();
+            Container.RegisterSingleton<CustomerDetailsViewModel>();
 
             Container.RegisterSingleton<LoginViewModel>();
 

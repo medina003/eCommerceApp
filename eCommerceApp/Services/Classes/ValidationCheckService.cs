@@ -2,9 +2,12 @@
 using Data.Models;
 using eCommerceApp.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,6 +18,35 @@ namespace eCommerceApp.Services.Classes
     {
 
         public static Error? Error { get; set; } = new();
+        public static (Error?, bool) IsValidForPayment(PaymentDetails paymentDetails)
+        {
+            Error = new();
+            bool Flag = false;
+            int Counter = 0;
+            Error.FirstName_error = "";
+            Error.LastName_error = "";
+            Error.CardNumberError = "";
+            Error.CVVError = "";
+            Error.MonthError = "";
+            Error.YearError = "";
+            if ((paymentDetails.Name.IsNullOrEmpty()) || (paymentDetails.Surname.IsNullOrEmpty() || paymentDetails.Number.IsNullOrEmpty() || paymentDetails.Year.IsNullOrEmpty() || paymentDetails.Month.IsNullOrEmpty() || paymentDetails.CVV.IsNullOrEmpty()))
+            {
+                Error.Empty_error = "All fields must be filled in";
+                Counter++;
+
+            }
+            else
+            {
+                if (!Regex.IsMatch((paymentDetails.Number), @"[0-9]{16}")) { Error.CardNumberError = "Must include only 16 digits"; Counter++; }
+                if (!Regex.IsMatch((paymentDetails.Month), @"^(0?[1-9]|1[012])$")) { Error.MonthError = "Invalid month"; Counter++; }
+                if (!Regex.IsMatch((paymentDetails.Year), @"^(19|20)\d{2}$")) { Error.YearError = "Invalid year"; Counter++; }
+                if (!Regex.IsMatch((paymentDetails.CVV), @"^[0-9]{3, 4}$")) { Error.CVVError = "Invalid CVV"; Counter++; }
+                
+            }
+            if(Counter == 0) { Flag = true; }
+            return (Error, Flag);
+
+        }
         public static (Error?, bool) IsValidForRegistrationVM(User? User,string PasswordConfirmation)
         {
             Error = new();
@@ -58,7 +90,7 @@ namespace eCommerceApp.Services.Classes
                 //db.Users.Add(new User() { Name = "Medina", Surname = "Abasova", Email = "medina.abasova@gmail.com", Password = "Medina123", UserType="User" });
                 //db.Users.Load();
                 //var c = db.Users.SingleOrDefault(u => u.Email == User.Email);
-                if (db.Users.Any(u => u.Email == User.Email)) { Error.Email_error = "Email has already been taken"; counter++; }
+                if (db.Users.Any(u => u.Email == User!.Email)) { Error.Email_error = "Email has already been taken"; counter++; }
             }
 
             if (counter == 0) { Flag = true; }

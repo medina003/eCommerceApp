@@ -23,6 +23,12 @@
             <DataTemplate DataType="{x:Type viewModel:RegistrationViewModel}">
                 <view:RegistrationView></view:RegistrationView>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:PaymentViewModel}">
+                <view:PaymentView></view:PaymentView>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:CustomerDetailsViewModel}">
+                <view:CustomerDetailsView></view:CustomerDetailsView>
+            </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
